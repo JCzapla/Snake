@@ -4,18 +4,17 @@ var c=document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 ctx.rect(20,20,20,20);
 ctx.fillStyle = "red";
-ctx.fill();
+ctx.fill();	
+window.addEventListener('keydown',this.keyHandler,false);
+
 
 var snake = new Snake();
 
 setInterval(function(){
-console.log(c.onkeydown);
-	c.onkeydown = document.getElementById("doc").style.backgroundColor = "red";
 	ctx.clearRect(0, 0, c.width, c.height);
 	snake.draw();
 	snake.update();
-	keyHandler();
-}, 500);
+}, 15);
 
 function Snake(){
 	this.x = 60;
@@ -42,17 +41,17 @@ function Snake(){
 	}
 }
 
-function keyHandler(){
-	if(c.onkeydown === 37){
-		s.setD(-1,0);
+function keyHandler(e){
+	if(e.keyCode === 37){
+		snake.setD(-1,0);
 	}
-	if(c.onkeydown === 38){
-		s.setD(0,1);
+	if(e.keyCode === 38){
+		snake.setD(0,-1);
 	}
-	if(c.onkeydown === 39){
-		s.setD(1,0);		
+	if(e.keyCode === 39){
+		snake.setD(1,0);		
 	}
-	if(c.onkeydown === 40){
-		s.setD(0,1);
+	if(e.keyCode === 40){
+		snake.setD(0,1);
 	}
 }
