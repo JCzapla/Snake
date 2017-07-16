@@ -12,19 +12,68 @@ setInterval(function(){
 	ctx.clearRect(0, 0, c.width, c.height);
 	snake.draw();
 	snake.update();
+	collsion();
 	if(fruit.x === -1)
 		fruit.initDraw();
 	else
 		fruit.draw();
 }, 250);
 
-
+function collsion(){
+	if(snake.head.x === fruit.x && snake.head.y === fruit.y){
+		snake.length++;
+		if(snake.dx === 1){
+			var newPart = new snakePart();
+			newPart.x = snake.tail.x + (-snake.dx)*scale;
+			newPart.y = snake.tail.y + (-snake.dy)*scale;
+			snake.wholeSnake.push(newPart);
+			snake.tail = newPart;
+			fruit.x = -1;
+			fruit.y = -1
+		}
+		else if(snake.dx === -1){
+			var newPart = new snakePart();
+			newPart.x = snake.tail.x + snake.dx*scale;
+			newPart.y = snake.tail.y + snake.dy*scale;
+			snake.wholeSnake.push(newPart);
+			snake.tail = newPart;	
+			fruit.x = -1;
+			fruit.y = -1
+		}
+		else if(snake.dy === -1){
+			var newPart = new snakePart();
+			newPart.x = snake.tail.x + snake.dx*scale;
+			newPart.y = snake.tail.y + snake.dy*scale;
+			snake.wholeSnake.push(newPart);
+			snake.tail = newPart;	
+			fruit.x = -1;
+			fruit.y = -1
+		}else if(snake.dx === 1){
+			var newPart = new snakePart();
+			newPart.x = snake.tail.x + snake.dx*scale;
+			newPart.y = snake.tail.y + snake.dy*scale;
+			snake.wholeSnake.push(newPart);
+			snake.tail = newPart;
+			fruit.x = -1;
+			fruit.y = -1
+		}
+		else if(snake.dy === 1){
+			var newPart = new snakePart();
+			newPart.x = snake.tail.x + snake.dx*scale;
+			newPart.y = snake.tail.y + snake.dy*scale;
+			snake.wholeSnake.push(newPart);
+			snake.tail = newPart;	
+			fruit.x = -1;
+			fruit.y = -1
+		}
+	}
+}	
 
 function Fruit(){
 	this.x = -1;
 	this.y = -1;
 	this.cords = [this.x,this.y];
-	
+
 	this.initDraw = function(){
 		ctx.beginPath();
 		this.cords = scaleRound(Math.floor((Math.random() * c.width)), Math.floor((Math.random() * c.width)));
@@ -43,23 +92,41 @@ function Fruit(){
 	}
 }
 
+function snakePart(){
+	this.x;
+	this.y;
+}
+
 function Snake(){
-	this.x = 0;
-	this.y = 0;
+	this.head = new snakePart();
+	this.head.x = 0;
+	this.head.y = 0;
 	this.dx = 1;
 	this.dy = 0;
+	this.tail = new snakePart();
+	this.tail =this.head;
+	this.length = 1;
+	this.wholeSnake = [this.length];
+	this.wholeSnake[0] = this.head;
 	
 	this.update = function(){
-		this.x = this.x + this.dx*scale;
-		this.y = this.y + this.dy*scale;
-		
+
+		for(i = this.length - 1; i > 0; i--){
+				this.wholeSnake[i].x = this.wholeSnake[i - 1].x;
+				this.wholeSnake[i].y = this.wholeSnake[i - 1].y;
+			}	
+				
+		this.head.x = this.head.x + this.dx*scale;
+		this.head.y = this.head.y + this.dy*scale;	
 	}
+	
 	this.draw = function(){
-		ctx.beginPath();
-		ctx.rect(this.x,this.y,scale,scale);
-		ctx.fillStyle = "blue";
-		ctx.fill();
-		
+		for(i = 0; i < this.length; i++){
+			ctx.beginPath();
+			ctx.rect(this.wholeSnake[i].x,this.wholeSnake[i].y,scale,scale);
+			ctx.fillStyle = "blue";
+			ctx.fill();
+		}
 	}
 	
 	this.setD = function(dx,dy){
